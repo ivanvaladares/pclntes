@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    let timerId = null
+    let serviceWorkerRegistered = false
+    const urlSearchParams = new URLSearchParams(window.location.search)
+    const basketId = urlSearchParams.get('basketId')
+
+    // Check if service worker is supported
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(registration => {
+          serviceWorkerRegistered = true
+          console.log('Service Worker registered for page 2:', registration)
+
+          navigator.serviceWorker.addEventListener('message', event => {
+            const message = event.data
+            // let make sure we only react to our requests
+            if (message.type === 'basketResponse' && message.data.basketId === basketId) {
+              clearInterval(timerId)
+              console.log('we are ready to go to checkout: #' + message.data.basketId)
+              document.getElementById('response').innerHTML = `
+                Done processing basket! <br> <pre>${JSON.stringify(message.data, null, 2)}</pre>
+                Ready to go to checkout!
+              `
+            }
+          })
+        })
+        .catch(error => {
+          console.error('Service Worker registration failed:', error)
+        })
+    }
+
+    function getBasket(key) {
+      if (serviceWorkerRegistered) {
+        navigator.serviceWorker.controller.postMessage({
+          type: 'getBasket',
+          data: { basketId }
+        })
+      }
+    }
+
+    timerId = setInterval(() => {
+      console.log('Attempt to get basket: #' + basketId)
+      getBasket(basketId)
+    }, 1000)
+
+  </script>
+</head>
+<body>
+  This is the second page. 
+  <br>
+  <div id="response">loading....</div>
+</body>
+</html>

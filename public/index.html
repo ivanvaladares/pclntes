@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    var serviceWorkerRegistered = false
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(registration => {
+          console.log('Service Worker registered for page 1:', registration)
+          serviceWorkerRegistered = true
+        })
+        .catch(error => {
+          console.error('Service Worker registration failed:', error)
+        })
+    }
+  
+    function postMessageToServiceWorker(basketId) {
+      if (serviceWorkerRegistered) {    
+        navigator.serviceWorker.ready.then(registration => {
+          registration.active.postMessage({
+            type: 'processBasket',
+            data: { 
+              basketId,
+              name: 'test',
+              price: 100,
+              description: 'one long description.....',
+            }
+          })
+        })
+      }
+    }
+  
+    async function openNewTab() {
+      const basketId = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,a=>(a^Math.random()*16>>a/4).toString(16))
+      window.open('/index2.html?basketId=' + basketId, '_blank')
+      postMessageToServiceWorker(basketId)
+    }
+  </script>
+</head>
+<body>
+  This is the first page.
+  <br />
+  <a href="#" onclick="openNewTab()">Open a new tab and process basket</a>
+</body>
+</html>
