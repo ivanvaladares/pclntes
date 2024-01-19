@@ -2,6 +2,7 @@ const express = require('express')
 const http = require('http')
 const server = express()
 const path = require('path')
+const port = process.env.PORT || 8080
 
 server.use(express.static(path.join(__dirname, '/public/')));
 
@@ -10,6 +11,6 @@ server.get('/', (req, res) => {
 });
 
 http.createServer(server)
-    .listen(8080, () => {
-        console.log(`server listening on http://localhost:${8080}`)
+    .listen(port, () => {
+        console.log(`server listening on http://localhost:${port}`)
     })
