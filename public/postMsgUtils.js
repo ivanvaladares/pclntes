@@ -44,9 +44,10 @@ function registerPostMessageListenerForPage2(basketId) {
     if (event.data.type === 'basketResponse' && event.data.data.basketId === basketId) {
       clearInterval(timerId)
       document.getElementById('response').innerHTML = `
-      Done processing basket! <br> <pre>${JSON.stringify(event.data.data, null, 2)}</pre>
-      Ready to go to checkout!
-    `
+        Done processing basket! <br> <pre>${JSON.stringify(event.data.data, null, 2)}</pre>
+        Ready to go to checkout!
+      `
+      console.log('timer cleared and response displayed')
     }
   })
 
