@@ -38,30 +38,36 @@ function registerWorkerForPage2(basketId) {
         console.error('Service Worker registration failed:', error)
       })
 
-      timerId = setInterval(() => {
-        getBasketFromServiceWorker(basketId)
-      }, 1000)
+    timerId = setInterval(() => {
+      getBasketFromServiceWorker(basketId)
+    }, 1000)
   }
 }
 
 function sendBasketToServiceWorker(basketId) {
   if (serviceWorkerRegistered) {
-    navigator.serviceWorker.controller.postMessage({
-      type: 'processBasket',
-      data: { 
-        basketId,
-        name: 'test',
-        price: 100,
-        description: 'one long description.....',
-      }
-    })
+    navigator.serviceWorker.ready
+      .then(registration => {
+        registration.active.postMessage({
+          type: 'processBasket',
+          data: {
+            basketId,
+            name: 'test',
+            price: 100,
+            description: 'one long description.....',
+          }
+        })
+      })
   }
 }
 
 function getBasketFromServiceWorker(basketId) {
   console.log('Attempt to get basket: #' + basketId)
-  navigator.serviceWorker.controller.postMessage({
-    type: 'getBasket',
-    data: { basketId }
-  })
+  navigator.serviceWorker.ready
+    .then(registration => {
+      registration.active.postMessage({
+        type: 'getBasket',
+        data: { basketId }
+      })
+    })
 }
