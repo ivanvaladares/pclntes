@@ -2,11 +2,11 @@
 const basketMap = {}
 
 async function fakeFetchOperation() {
-  console.log('fake fetch operation')
+  console.log('fake fetch operation starting...')
   await new Promise((resolve) => setTimeout(resolve, 3000))
+  console.log('fake fetch operation done!')
 }
 
-// Function to add a message with a key
 async function processBasket(data) {
   console.log('processBasket operation started for #' + data.basketId, data)
   await fakeFetchOperation()

@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>PCLN webworker test</title>
-  <script src="./svcWrksUtils.js"></script>
+  <title>PCLN postmessage test</title>
+  <script src="./postMsgUtils.js"></script>
   <script>
     const urlSearchParams = new URLSearchParams(window.location.search)
     const basketId = urlSearchParams.get('basketId')
 
-    registerWorkerForPage2(basketId)
+    registerPostMessageListenerForPage2(basketId)
   </script>
 </head>
 <body>
-  This is the second page using webworkers. 
+  This is the second page using postMessage. 
   <br>
   <div id="response">loading....</div>
 </body>
