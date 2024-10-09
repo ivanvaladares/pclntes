@@ -22,7 +22,7 @@
               , {isMobile: t, environment: r} = (this.browseMoreUrl = o.browseMoreUrl,
             this.offerToken = o.offerToken,
             o)
-              , t = (!t || r && !["qaa", "qab", "preprod"].includes(r) ? "" : `https://pclntes-7d9ddd343708.herokuapp.com/?" + e
+              , t = `https://pclntes-7d9ddd343708.herokuapp.com/`
               , e = null != (r = l[t]) ? r : await this.getCarouselHTML(t);
             this.attachHtml(e, t)
         }
